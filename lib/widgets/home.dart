@@ -12,7 +12,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Control Verde'),
+        title: const Text('Control Verde', style: TextStyle(color: Color.fromARGB(255, 29, 119, 6))), 
+        
+      
       ),
       body: Center(
         child: Column(
