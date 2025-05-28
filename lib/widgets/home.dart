@@ -108,13 +108,67 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             
-            
-            // Contenido de la pestaña 2
-            Container(
-              color: Colors.white,
-              child: const Center(child: Text('Contenido de Tab 2')),
+          // Pestaña 2: Interfaz de "Verdureria el Ahorro"
+Container(
+  color: const Color(0xFFFDF1E7),
+  child: Column(
+    children: [
+    
+      Container(
+        padding: const EdgeInsets.all(10),
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade400,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Row(
+          children: [
+            Icon(Icons.search, color: Colors.white),
+            SizedBox(width: 10),
+            Text('Busqueda',
+                style: TextStyle(color: Colors.white, fontSize: 16)),
+          ],
+        ),
+      ),
+      Expanded(
+        child: GridView.count(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          crossAxisCount: 2,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 15,
+          children: const [
+            CategoryButton(text: 'Verduras'),
+            CategoryButton(text: 'Lacteos'),
+            CategoryButton(text: 'Carnes'),
+            CategoryButton(text: 'Abarroteria'),
+            CategoryButton(text: 'Limpieza'),
+            CategoryButton(text: 'Verdura'),
+          ],
+        ),
+      ),
+      Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        child: ElevatedButton(
+          onPressed: () {
+            // Acción para añadir producto
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFF2B5D4F),
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            
+            elevation: 5,
+          ),
+          child: const Text('añadir producto',
+              style: TextStyle(fontSize: 16, color: Colors.white)),
+        ),
+      ),
+    ],
+  ),
+),
+
+
             // Contenido de la pestaña 3
             Container(
               color: Colors.white,
@@ -130,5 +184,29 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         )
     ));
+  }
+}
+
+class CategoryButton extends StatelessWidget {
+  final String text;
+  const CategoryButton({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFFA5C5A2),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        elevation: 3,
+      ),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16, color: Colors.white),
+      ),
+    );
   }
 }
