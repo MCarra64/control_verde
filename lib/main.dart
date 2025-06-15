@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
-import 'widgets/home.dart';
+import 'screens/login_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const VerdureriaElAhorroApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class VerdureriaElAhorroApp extends StatelessWidget {
+  const VerdureriaElAhorroApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Verdurería el Ahorro',
       debugShowCheckedModeBanner: false,
-      title: 'Control Verde',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      home: const MyHomePage(),
+      home: const LoginScreen(),
     );
   }
 }
