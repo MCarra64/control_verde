@@ -7,6 +7,7 @@ class AppStyles {
   static const Color cardBackground = Color(0xFFFFFFFF);
   static const Color textDark = Color(0xFF1B5E20);
   static const Color textLight = Color.fromARGB(255,208,238,232);
+  static const Color greenBackground = Color(0xFFC8E6C9);
 
   static final ButtonStyle elevatedButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: primaryGreen,

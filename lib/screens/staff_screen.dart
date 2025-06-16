@@ -14,7 +14,7 @@ class StaffScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Expanded(
             child: ListView.builder(
-              itemCount: 6, //placeholder mientas se integra con la base de datos
+              itemCount: 5, //placeholder mientas se integra con la base de datos
               itemBuilder: (context, index) => Card(
                 color: AppStyles.cardBackground,
                 child: ListTile(
