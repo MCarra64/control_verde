@@ -50,7 +50,7 @@ class _StaffScreenState extends State<StaffScreen> {
                       title: Text(employee['fullName'] ?? ''),
                       subtitle: Text('Usuario: ${employee['username']}'),
                       trailing: IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
+                        icon: const Icon(Icons.edit, color: AppStyles.textDark),
                         onPressed: () {
                           Navigator.push(
                             context,
