@@ -21,6 +21,9 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final spots = _generateSpots();
+    final double maxX = (spots.isNotEmpty) ? spots.last.x : 6;
+
     return Scaffold(
       backgroundColor: AppStyles.lightBackground,
       appBar: AppBar(
@@ -39,7 +42,11 @@ class _SummaryScreenState extends State<SummaryScreen> {
               height: 250,
               child: LineChart(
                 LineChartData(
-                  lineBarsData: _buildLines(),
+                  lineBarsData: _buildLines(spots),
+                  minY: 0,
+                  maxY: 120,
+                  minX: 0,
+                  maxX: maxX,
                   titlesData: FlTitlesData(
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
@@ -57,7 +64,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                         reservedSize: 40,
                         getTitlesWidget: (value, meta) {
                           if (value % 10 == 0 && value >= 10) {
-                            return Text('${value.toInt()} M');
+                            return Text('${value.toInt()}');
                           }
                           return const SizedBox.shrink();
                         },
@@ -68,8 +75,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   ),
                   gridData: FlGridData(show: true),
                   borderData: FlBorderData(show: true),
-                  minY: 0,
-                  maxY: 120,
                 ),
               ),
             ),
@@ -81,6 +86,71 @@ class _SummaryScreenState extends State<SummaryScreen> {
         ),
       ),
     );
+  }
+
+  List<LineChartBarData> _buildLines(List<FlSpot> data) {
+    return [
+      if (showBruto)
+        LineChartBarData(
+          spots: data,
+          isCurved: true,
+          color: Colors.green,
+          barWidth: 3,
+          dotData: FlDotData(show: true),
+        ),
+      if (showNeto)
+        LineChartBarData(
+          spots: data.map((s) => FlSpot(s.x, s.y * 0.7)).toList(),
+          isCurved: true,
+          color: Colors.blue,
+          barWidth: 3,
+          dotData: FlDotData(show: true),
+        ),
+      if (showGasto)
+        LineChartBarData(
+          spots: data.map((s) => FlSpot(s.x, s.y * 0.5)).toList(),
+          isCurved: true,
+          color: Colors.red,
+          barWidth: 3,
+          dotData: FlDotData(show: true),
+        ),
+    ];
+  }
+
+  List<FlSpot> _generateSpots() {
+    if (selectedPeriod == 'Semanal') {
+      return List.generate(7, (i) => FlSpot(i.toDouble(), (i + 1) * 10.0));
+    } else if (selectedPeriod == 'Mensual') {
+      int daysInMonth = DateUtils.getDaysInMonth(selectedYear, selectedMonth);
+      int step = (daysInMonth / 7).ceil(); 
+      return List.generate(
+        (daysInMonth / step).ceil(),
+        (i) {
+          int day = (i * step) + 1;
+          if (day > daysInMonth) day = daysInMonth;
+          return FlSpot(i.toDouble(), (day) * 5.0);
+        },
+      );
+    } else if (selectedPeriod == 'Anual') {
+      return List.generate(12, (i) => FlSpot(i.toDouble(), (i + 1) * 8.0));
+    }
+    return [];
+  }
+
+  String _getBottomLabel(int index) {
+    if (selectedPeriod == 'Semanal') {
+      final daysES = ['D', 'L', 'M', 'Mi', 'J', 'V', 'S'];
+      return daysES[index % 7];
+    } else if (selectedPeriod == 'Mensual') {
+      int daysInMonth = DateUtils.getDaysInMonth(selectedYear, selectedMonth);
+      int step = (daysInMonth / 7).ceil();
+      int day = (index * step) + 1;
+      if (day > daysInMonth) day = daysInMonth;
+      return '$day';
+    } else if (selectedPeriod == 'Anual') {
+      return '${index + 1}';
+    }
+    return '';
   }
 
   Widget _buildPeriodSelector() {
@@ -141,39 +211,6 @@ class _SummaryScreenState extends State<SummaryScreen> {
         });
       },
     );
-  }
-
-  List<LineChartBarData> _buildLines() {
-    List<FlSpot> dataBruto = List.generate(12, (i) => FlSpot(i.toDouble(), (i + 1) * 10.0));
-    List<FlSpot> dataNeto = List.generate(12, (i) => FlSpot(i.toDouble(), (i + 1) * 7.0));
-    List<FlSpot> dataGasto = List.generate(12, (i) => FlSpot(i.toDouble(), (i + 1) * 5.0));
-
-    return [
-      if (showBruto)
-        LineChartBarData(
-          spots: dataBruto,
-          isCurved: true,
-          color: Colors.green,
-          barWidth: 3,
-          dotData: FlDotData(show: true),
-        ),
-      if (showNeto)
-        LineChartBarData(
-          spots: dataNeto,
-          isCurved: true,
-          color: Colors.blue,
-          barWidth: 3,
-          dotData: FlDotData(show: true),
-        ),
-      if (showGasto)
-        LineChartBarData(
-          spots: dataGasto,
-          isCurved: true,
-          color: Colors.red,
-          barWidth: 3,
-          dotData: FlDotData(show: true),
-        ),
-    ];
   }
 
   Widget _buildCheckboxes() {
@@ -238,23 +275,5 @@ class _SummaryScreenState extends State<SummaryScreen> {
         ],
       ),
     );
-  }
-
-  String _getBottomLabel(int index) {
-    if (selectedPeriod == 'Semanal') {
-      final now = DateTime.now();
-      final startOfWeek = now.subtract(Duration(days: now.weekday % 7));
-      final day = startOfWeek.add(Duration(days: index));
-      return DateFormat.E().format(day).substring(0, 1);
-    } else if (selectedPeriod == 'Mensual') {
-      int daysInMonth = DateUtils.getDaysInMonth(selectedYear, selectedMonth);
-      int day = (index * 5 + 1);
-      if (day > daysInMonth) day = daysInMonth;
-      return '$day';
-    } else if (selectedPeriod == 'Anual') {
-      const months = ['E', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-      return months[index % 12];
-    }
-    return '';
   }
 }
