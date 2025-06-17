@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
-import 'category_detail_screen.dart';  // Importa la nueva pantalla
+import 'add_product_screen.dart';
+import 'add_category_screen.dart';  // ✅ Importa la nueva pantalla
+import 'category_detail_screen.dart';
 
 class InventoryScreen extends StatelessWidget {
   const InventoryScreen({super.key});
@@ -36,7 +38,6 @@ class InventoryScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        // Navega a la pantalla de detalle con el nombre de la categoría
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -57,7 +58,7 @@ class InventoryScreen extends StatelessWidget {
                   }),
                 ),
               ),
-              const SizedBox(height: 80), // Espacio para los botones inferiores
+              const SizedBox(height: 80),
             ],
           ),
         ),
@@ -74,7 +75,12 @@ class InventoryScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
                   ),
                   onPressed: () {
-                    // Acción para añadir producto
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AddProductScreen(),
+                      ),
+                    );
                   },
                   child: const Text(
                     'Añadir producto',
@@ -90,7 +96,12 @@ class InventoryScreen extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 14.0),
                   ),
                   onPressed: () {
-                    // Acción para añadir categoría
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AddCategoryScreen(),  // ✅ Navega a AddCategoryScreen
+                      ),
+                    );
                   },
                   child: const Text(
                     'Añadir categoría',

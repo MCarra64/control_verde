@@ -1,37 +1,71 @@
 import 'package:flutter/material.dart';
 import '../utils/app_styles.dart';
+import 'edit_employee_screen.dart';
 
 class StaffScreen extends StatelessWidget {
   const StaffScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+    // Datos simulados
+    final List<Map<String, String>> employees = [
+      {'username': 'jdoe', 'fullName': 'John Doe'},
+      {'username': 'asmith', 'fullName': 'Alice Smith'},
+    ];
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Control de personal'),
+        backgroundColor: AppStyles.primaryGreen,
+      ),
+      backgroundColor: const Color(0xFFC8E6C9),
+      body: Stack(
         children: [
-          const Text('Control de Personal', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: AppStyles.textDark)),
-          const SizedBox(height: 16),
-          Expanded(
-            child: ListView.builder(
-              itemCount: 5, //placeholder mientas se integra con la base de datos
-              itemBuilder: (context, index) => Card(
-                color: AppStyles.cardBackground,
+          ListView.builder(
+            padding: const EdgeInsets.all(16.0),
+            itemCount: employees.length,
+            itemBuilder: (context, index) {
+              final employee = employees[index];
+              return Card(
                 child: ListTile(
-                  leading: const Icon(Icons.person, color: AppStyles.primaryGreen),
-                  title: Text('Empleado ${index + 1}', style: const TextStyle(color: AppStyles.textDark)), //placeholder mientas se integra con la base de datos
+                  leading: Icon(Icons.person, color: AppStyles.primaryGreen),
+                  title: Text(employee['fullName'] ?? ''),
+                  subtitle: Text('Usuario: ${employee['username']}'),
                   trailing: IconButton(
-                    icon: const Icon(Icons.edit, color: AppStyles.accentGreen),
-                    onPressed: () {}, //placeholder para editar empleado
+                    icon: const Icon(Icons.edit, color: Colors.blue),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditEmployeeScreen(
+                            username: employee['username']!,
+                            fullName: employee['fullName']!,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
+              );
+            },
+          ),
+          Positioned(
+            bottom: 32,
+            left: 16,
+            right: 16,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppStyles.primaryGreen,
+                padding: const EdgeInsets.symmetric(vertical: 14.0),
+              ),
+              onPressed: () {
+                // Aquí puedes navegar a una pantalla de añadir empleado si quieres
+              },
+              child: const Text(
+                'Añadir empleado',
+                style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ),
-          ),
-          ElevatedButton(
-            style: AppStyles.elevatedButtonStyle,
-            onPressed: () {},
-            child: const Text('Añadir empleado'),
           ),
         ],
       ),
